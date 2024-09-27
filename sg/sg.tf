@@ -1,12 +1,12 @@
 module "vpc" {
-  source = "../vpc"
-  # module.vpc.aws_vpc_id
-
+  source = "../vpc"  # caminho correto para o módulo VPC
 }
+
 
 resource "aws_security_group" "sg_public_ec2" {
   # vpc_id = aws_vpc.vpc.main_vpc.id
   vpc_id = module.vpc.aws_vpc_id
+
 
 
   ingress {

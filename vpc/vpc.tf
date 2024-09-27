@@ -5,7 +5,7 @@ resource "aws_vpc" "main_vpc" {
 # Criação da Subnet Pública
 resource "aws_subnet" "subnet_public" {
   vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "172.31.1.0/20"
+  cidr_block = "172.31.1.0/24"
  # sg
   map_public_ip_on_launch = true
 }
@@ -17,7 +17,7 @@ output "subnet_public_id" {
 # Criação da Subnet private 
 resource "aws_subnet" "subnet_private" {
   vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "172.31.2.0/20"
+  cidr_block = "172.31.2.0/24"
 }
 
 output "subnet_private_id" {
@@ -27,7 +27,7 @@ output "subnet_private_id" {
 # Criação da Subnet private 2 
 resource "aws_subnet" "subnet_private2" {
   vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "172.31.3.0/20"
+  cidr_block = "172.31.3.0/24"
 }
 
 # criando o internet gateway
@@ -53,6 +53,5 @@ resource "aws_route_table_association" "public_subnet_assoc" {
 
 
 output "aws_vpc_id" {
-  # value = aws_instance.web_server.public_ip
-  value = aws_vpc.main_vpc.id 
+  value = aws_vpc.main_vpc.id
 }
