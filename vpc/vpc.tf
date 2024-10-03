@@ -6,6 +6,7 @@ resource "aws_vpc" "main_vpc" {
 resource "aws_subnet" "subnet_public" {
   vpc_id     = aws_vpc.main_vpc.id
   cidr_block = "172.31.1.0/24"
+ # sg
   map_public_ip_on_launch = true
 }
 
@@ -29,12 +30,12 @@ resource "aws_subnet" "subnet_private2" {
   cidr_block = "172.31.3.0/24"
 }
 
-# Criando o internet gateway
+# criando o internet gateway
 resource "aws_internet_gateway" "main_gw" {
   vpc_id = aws_vpc.main_vpc.id
 }
 
-# Criando a rota para internet
+# criando a rota para internet
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main_vpc.id
 
@@ -44,11 +45,12 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
-# Associando a subnet publica com a rota publica
+# associando a subnet publica com a rota publica
 resource "aws_route_table_association" "public_subnet_assoc" {
   subnet_id      = aws_subnet.subnet_public.id
   route_table_id = aws_route_table.public_rt.id
 }
+
 
 output "aws_vpc_id" {
   value = aws_vpc.main_vpc.id

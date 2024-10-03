@@ -1,10 +1,10 @@
 module "sg" {
-  source = "../sg"  
+  source = "../sg"  # caminho correto para o módulo SG
+}
+module "vpc" {
+  source = "../vpc"  # caminho correto para o módulo VPC
 }
 
-module "vpc" {
-  source = "../vpc"  
-}
 
 resource "aws_launch_template" "web_server_lt" {
   name_prefix   = "web-server-"
@@ -14,10 +14,10 @@ resource "aws_launch_template" "web_server_lt" {
   user_data = base64encode(<<-EOF
     #!/bin/bash
     yum update -y
-    yum install -y docker
-    systemctl start docker
-    systemctl enable docker
-    docker run -d -p 80:80 --name docker-app nathaliavc/getting-started:latest
+    yum install -y httpd.x86_64
+    systemctl start httpd.service
+    systemctl enable httpd.service
+    echo "Hello World from $(hostname -f)" > /var/www/html/index.html
     EOF
   )
 
@@ -26,6 +26,7 @@ resource "aws_launch_template" "web_server_lt" {
     security_groups             = [module.sg.sg_public_ec2_id]
   }
 }
+
 
 # Auto Scaling Group
 resource "aws_autoscaling_group" "web_asg" {
@@ -43,6 +44,7 @@ resource "aws_autoscaling_group" "web_asg" {
   }
 
 }
+
 
 resource "aws_autoscaling_policy" "scale_up" {
   name                   = "scale-up"
